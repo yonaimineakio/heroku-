@@ -1,0 +1,40 @@
+<% provide(:title, @micropost.content) %>
+<div class="row">
+  <aside class="col-md-4">
+    <section class="micropost_info">
+      <h1>
+        <%= @micropost.content %>
+      </h1>
+      <span>Posted by <%= @micropost.user.name %></span>
+      <span class="timestamp">
+        in <%= time_ago_in_words(@micropost.created_at) %> ago.
+      </span>
+    </section>
+  </aside>
+  </div>
+<div class="col-md-4">
+ <% if @micropost.comments.any? %>
+  <h3>Comments (<%= @micropost.comments.count%>)</h3>
+  <ol class="comments">
+    <%= render @comments %>
+  </ol>
+  <%= will_paginate %>
+<% end%>
+</div>
+<%= form_for([@micropost ,@micropost.comments.build]) do |f| %>
+<%= render 'shared/error_messages', object: f.object %>
+<div class="field">
+    <%= f.text_area :body, placeholder: "Send comment..." %>
+</div>
+<%= f.submit "Comment", class: "btn btn-primary"%>
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Dropdown button
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <p>画像</p>
+    <%= f.file_field :image%>
+    <p>動画</p>
+    <%= f.file_field :video%>
+  </div>
+</div><% end%>
